@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>红外材料选型与技术支持平台 | B2B智能电商</title>
+    <!-- 引入Font Awesome 6 (免费图标库) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 使用现代字体 Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7fc;
+            color: #1a2c3e;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 头部导航 */
+        .header {
+            background: linear-gradient(135deg, #0b2b3b 0%, #123e52 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        .logo p {
+            font-size: 0.85rem;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+        .badge-tag {
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .badge-tag i {
+            margin-right: 6px;
+        }
+
+        /* 业务声明卡片 (readdy文字指令) */
+        .info-banner {
+            background: #e9f0f5;
+            border-left: 5px solid #2c7da0;
+            margin: 24px 0;
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .info-text {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        .info-text span {
+            background: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: #0b3b4f;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .info-text i {
+            margin-right: 8px;
+            color: #2c7da0;
+        }
+        .readdy-remark {
+            font-size: 0.85rem;
+            background: #d9e6f2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #005073;
+        }
+
+        /* 双列卡片区: 智能选型表单 + 推荐结果 */
+        .smart-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin: 32px 0;
+        }
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            padding: 28px 26px;
+            transition: transform 0.2s ease;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .card h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            border-left: 5px solid #2c7da0;
+            padding-left: 16px;
+            color: #1a4d62;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e4e;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #dce5ec;
+            border-radius: 16px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #fff;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #2c7da0;
+            box-shadow: 0 0 0 3px rgba(44,125,160,0.2);
+        }
+        .rec-card {
+            background: #f8fafd;
+            border-radius: 24px;
+            padding: 20px;
+            margin-top: 8px;
+        }
+        .rec-material {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0f5c7a;
+            margin-bottom: 12px;
+        }
+        .rec-param {
+            background: white;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin: 12px 0;
+            font-family: monospace;
+            border: 1px solid #e2edf2;
+        }
+        .btn-primary {
+            background: #2c7da0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover {
+            background: #1f5e7a;
+            transform: scale(0.98);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #2c7da0;
+            color: #2c7da0;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #eef4f8;
+        }
+
+        /* 自助选品卡片区 */
+        .products-section {
+            margin: 48px 0 32px;
+        }
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 28px;
+            padding: 20px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            transition: 0.2s;
+            border: 1px solid #eef2f6;
+        }
+        .product-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .product-spec {
+            color: #4a627a;
+            font-size: 0.85rem;
+            margin: 10px 0;
+        }
+        .price {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #1f6d8c;
+            margin: 12px 0;
+        }
+
+        /* 订单流程与演示区 */
+        .order-flow {
+            background: white;
+            border-radius: 28px;
+            padding: 28px;
+            margin: 40px 0;
+        }
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 30px 0 25px;
+            gap: 12px;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .step-icon {
+            width: 48px;
+            height: 48px;
+            background: #eef2f9;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2c7da0;
+        }
+        .step.active .step-icon {
+            background: #2c7da0;
+            color: white;
+        }
+        .cart-summary {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .flex-btns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        /* 技术支持区域 */
+        .tech-support {
+            background: linear-gradient(120deg, #f0f6fa, white);
+            border-radius: 28px;
+            padding: 28px;
+            margin: 32px 0 48px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            justify-content: space-between;
+        }
+        .support-form {
+            flex: 2;
+            min-width: 240px;
+        }
+        .support-contact {
+            flex: 1;
+            background: #eef2f7;
+            border-radius: 24px;
+            padding: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 28px;
+            color: #5f7f9a;
+            border-top: 1px solid #dce5ec;
+            margin-top: 20px;
+        }
+        @media (max-width: 860px) {
+            .smart-section {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 0 16px;
+            }
+            .step {
+                font-size: 0.75rem;
+            }
+        }
+        .toast-msg {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #1e2f3a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.3s ease;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top:0;left:0;width:100%;height:100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 32px;
+            padding: 28px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container header-content">
+        <div class="logo">
+            <h1>GuangYing<span style="font-weight:400">｜红外材料选型</span></h1>
+            <p>线上材料选型与技术支持平台 · 智能B2B交易闭环</p>
+        </div>
+        <div class="badge-tag"><i class="fas fa-microchip"></i> 红外芯片厂商 · 模组厂专用</div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- readdy 文字指令区域：业务名称、用途、适用对象 -->
+    <div class="info-banner">
+        <div class="info-text">
+            <span><i class="fas fa-building"></i> 业务名称：线上材料选型与技术支持平台</span>
+            <span><i class="fas fa-users"></i> 用户可以用来：在线选型、配方推荐、试用订单、MOU签订、小批量采购/信用支付、物流跟踪</span>
+            <span><i class="fas fa-industry"></i> 目标客户：红外芯片厂商 & 模组厂</span>
+        </div>
+        <div class="readdy-remark"><i class="fas fa-check-circle"></i> READDY指令集成 | 全流程线上材料智选+交易闭环</div>
+    </div>
+
+    <!-- 智能选型核心区 -->
+    <div class="smart-section">
+        <!-- 左侧选型表单 -->
+        <div class="card">
+            <h2><i class="fas fa-microscope"></i> 智能选型系统</h2>
+            <div class="form-group">
+                <label>响应波长 (μm)</label>
+                <input type="number" id="wavelength" value="4.2" step="0.1" placeholder="例如 3.0 ~ 12.0">
+            </div>
+            <div class="form-group">
+                <label>厚度 (μm)</label>
+                <input type="number" id="thickness" value="10" step="0.5">
+            </div>
+            <div class="form-group">
+                <label>涂布工艺</label>
+                <select id="coating">
+                    <option value="旋涂">旋涂 (Spin Coating)</option>
+                    <option value="喷涂">喷涂 (Spray Coating)</option>
+                    <option value="蒸镀">蒸镀 (Evaporation)</option>
+                </select>
+            </div>
+            <button id="refreshRecBtn" class="btn-primary"><i class="fas fa-sync-alt"></i> 智能推荐配方</button>
+        </div>
+
+        <!-- 右侧推荐结果展示 -->
+        <div class="card" id="resultCard">
+            <h2><i class="fas fa-flask"></i> 最佳配方推荐</h2>
+            <div id="recommendationArea" class="rec-card">
+                <div class="rec-material" id="recMaterial">中波红外窗口材料 M2</div>
+                <div class="rec-param" id="recParams">
+                    <strong>工艺参数：</strong> 退火温度 320°C · 涂布转速 1800rpm · 预烘烤 120°C/2min
+                </div>
+                <div><i class="fas fa-chart-line"></i> 预期透过率 >92% @3-5μm | 膜层硬度 5H</div>
+                <button id="addRecToCartBtn" class="btn-outline" style="margin-top: 20px;"><i class="fas fa-cart-plus"></i> 将此配方加入订单</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 线上自助选品区域 -->
+    <div class="products-section">
+        <div class="section-title"><i class="fas fa-boxes"></i> 线上自助选品 <span style="font-size:0.9rem; background:#eef2f6; padding:4px 12px; border-radius:40px;">热门红外材料</span></div>
+        <div class="products-grid" id="productsGrid">
+            <!-- 动态生成 3个预置产品卡片，JS注入也可, 但直接静态+动态均沾 -->
+        </div>
+    </div>
+
+    <!-- 订单流程示意 + 购物车/订单演示 -->
+    <div class="order-flow">
+        <h2><i class="fas fa-truck-fast"></i> 完整电商交易流程</h2>
+        <div class="steps" id="stepIndicators">
+            <div class="step"><div class="step-icon">1</div><div>在线选品</div></div>
+            <div class="step"><div class="step-icon">2</div><div>试用订单</div></div>
+            <div class="step"><div class="step-icon">3</div><div>MOU签订</div></div>
+            <div class="step"><div class="step-icon">4</div><div>支付/信用支付</div></div>
+            <div class="step"><div class="step-icon">5</div><div>物流发货</div></div>
+        </div>
+
+        <!-- 购物车/订单项摘要 -->
+        <div class="cart-summary">
+            <h3><i class="fas fa-shopping-basket"></i> 当前待下单项目 <span id="cartCount">(0)</span></h3>
+            <div id="cartItemsList" style="max-height: 200px; overflow-y: auto;">
+                <div style="color: #7f8c8d; text-align:center; padding: 16px;">暂无产品，点击“加入订单”或从推荐/自助选品添加</div>
+            </div>
+            <div class="flex-btns">
+                <button id="generateOrderBtn" class="btn-primary"><i class="fas fa-file-signature"></i> 生成试用订单</button>
+                <button id="clearCartBtn" class="btn-outline"><i class="fas fa-trash-alt"></i> 清空项目</button>
+            </div>
+        </div>
+
+        <!-- 订单状态演示区 (显示MOU/支付/物流信息) -->
+        <div id="orderStatusPanel" style="background:#f1f5f9; border-radius: 24px; padding: 18px; margin-top: 15px;">
+            <i class="fas fa-info-circle"></i> 订单状态 : <strong id="orderStateMsg">尚未生成订单</strong><br>
+            <div id="mouStatus">📄 MOU: 未签订</div>
+            <div id="paymentStatus">💳 支付/信用支付: 未支付</div>
+            <div id="logisticsStatus">📦 物流信息: 待发货</div>
+        </div>
+    </div>
+
+    <!-- 线上技术支持与调试服务 -->
+    <div class="tech-support">
+        <div class="support-form">
+            <h3><i class="fas fa-headset"></i> 技术支持与调试服务</h3>
+            <p style="margin-bottom: 12px;">提交技术咨询，工程师将在24h内响应</p>
+            <input type="text" id="techName" placeholder="公司/姓名" style="margin-bottom: 10px;">
+            <textarea id="techQuestion" rows="2" placeholder="描述您需要的材料调试或工艺支持..." style="width:100%; border-radius:20px; border:1px solid #ccc; padding:12px;"></textarea>
+            <button id="submitTechBtn" class="btn-primary" style="margin-top: 12px;"><i class="fas fa-paper-plane"></i> 提交技术请求</button>
+        </div>
+        <div class="support-contact">
+            <i class="fas fa-chalkboard-user fa-2x" style="color:#2c7da0;"></i>
+            <h4>调试服务专区</h4>
+            <p>· 线上远程联合调试</p>
+            <p>· 材料参数微调建议</p>
+            <p>· 快速小样验证支持</p>
+            <hr style="margin: 12px 0;">
+            <i class="fas fa-envelope"></i> 1493408752@qq.com <br>
+            <i class="fas fa-phone-alt"></i> 联系红外选型
+        </div>
+    </div>
+    <footer>
+        © 2026 光影线上材料选型与技术支持平台 | 红外材料智能B2B · 选型·MOU·信用支付一体化
+    </footer>
+</div>
+
+<!-- MOU签订模态框 -->
+<div id="mouModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-handshake fa-3x" style="color:#2c7da0;"></i>
+        <h3 style="margin: 16px 0;">谅解备忘录 (MOU)</h3>
+        <p style="margin-bottom: 20px;">双方同意按照本平台试用条款开展小批量材料合作，遵守技术规范与交付标准。</p>
+        <button id="confirmMouBtn" class="btn-primary">同意并签订MOU</button>
+        <button id="closeMouBtn" style="margin-left:12px; background:#ccc;" class="btn-outline">取消</button>
+    </div>
+</div>
+
+<script>
+    // 预设产品数据库 (自助选品)
+    const catalogProducts = [
+        { id: 1, name: "SWIR短波红外增透膜", specs: "响应波长: 1.2~2.5μm, 厚度8μm", price: "¥1200/片", coating: "旋涂", materialCode: "SW-AT1" },
+        { id: 2, name: "MWIR中波红外窗口材料", specs: "响应波长: 3~5μm, 厚度12μm", price: "¥1850/片", coating: "蒸镀", materialCode: "MW-M2" },
+        { id: 3, name: "LWIR长波红外滤光片", specs: "响应波长: 8~12μm, 厚度20μm", price: "¥2300/片", coating: "喷涂", materialCode: "LW-L3" }
+    ];
+
+    // 购物车数组
+    let cart = [];   // { name, specs, price, type, extra }
+    // 订单流程内部状态
+    let orderGenerated = false;
+    let mouSigned = false;
+    let paymentDone = false;
+    let logisticsInfo = "";
+
+    // 辅助: 显示toast
+    function showToast(msg) {
+        const toast = document.createElement('div');
+        toast.className = 'toast-msg';
+        toast.innerHTML = `<i class="fas fa-bell"></i> ${msg}`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2500);
+    }
+
+    // 更新购物车UI
+    function updateCartUI() {
+        const container = document.getElementById('cartItemsList');
+        const countSpan = document.getElementById('cartCount');
+        countSpan.innerText = `(${cart.length})`;
+        if (cart.length === 0) {
+            container.innerHTML = '<div style="color: #7f8c8d; text-align:center; padding: 16px;">暂无产品，点击“加入订单”或从推荐/自助选品添加</div>';
+            return;
+        }
+        let html = '';
+        cart.forEach((item, idx) => {
+            html += `<div class="cart-item">
+                        <div><strong>${item.name}</strong><br><small>${item.specs || ''}</small></div>
+                        <div>${item.price || '议价'} 
+                        <button class="btn-outline" style="padding:4px 12px; margin-left:12px;" data-index="${idx}">移除</button></div>
+                    </div>`;
+        });
+        container.innerHTML = html;
+        document.querySelectorAll('[data-index]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.getAttribute('data-index'));
+                cart.splice(idx, 1);
+                updateCartUI();
+                resetOrderFlowState();  // 购物车变动，重置订单状态避免不一致
+                showToast("已移除项目，订单状态已重置");
+            });
+        });
+    }
+
+    // 重置订单流程状态和UI
+    function resetOrderFlowState() {
+        orderGenerated = false; mouSigned = false; paymentDone = false; logisticsInfo = "";
+        document.getElementById('orderStateMsg').innerText = '未生成订单';
+        document.getElementById('mouStatus').innerHTML = '📄 MOU: 未签订';
+        document.getElementById('paymentStatus').innerHTML = '💳 支付/信用支付: 未支付';
+        document.getElementById('logisticsStatus').innerHTML = '📦 物流信息: 待发货';
+        // 步骤高亮重置
+        document.querySelectorAll('.step').forEach((step, idx) => { step.classList.remove('active'); });
+        // 保留第一步高亮可选
+        if(document.querySelector('.step')) document.querySelector('.step').classList.add('active');
+    }
+
+    // 更新订单状态面板 (根据全局状态)
+    function syncOrderStatusUI() {
+        if(orderGenerated) document.getElementById('orderStateMsg').innerText = '试用订单已生成';
+        else document.getElementById('orderStateMsg').innerText = '尚未生成订单';
+        document.getElementById('mouStatus').innerHTML = mouSigned ? '📄 MOU: 已签订 ✓' : '📄 MOU: 未签订';
+        document.getElementById('paymentStatus').innerHTML = paymentDone ? '💳 支付/信用支付: 已完成支付' : '💳 支付/信用支付: 未支付';
+        document.getElementById('logisticsStatus').innerHTML = logisticsInfo ? `📦 物流: ${logisticsInfo}` : '📦 物流信息: 待发货';
+
+        // 更新步骤指示器 (视觉反馈)
+        const steps = document.querySelectorAll('.step');
+        steps.forEach((step, i) => step.classList.remove('active'));
+        if (cart.length > 0) steps[0]?.classList.add('active'); // 选品有货
+        if (orderGenerated) steps[1]?.classList.add('active');
+        if (mouSigned) steps[2]?.classList.add('active');
+        if (paymentDone) steps[3]?.classList.add('active');
+        if (logisticsInfo && logisticsInfo !== "") steps[4]?.classList.add('active');
+    }
+
+    // 添加到购物车通用
+    function addToCart(itemName, details, priceVal = "需报价") {
+        cart.push({ name: itemName, specs: details, price: priceVal });
+        updateCartUI();
+        resetOrderFlowState();
+        showToast(`✅ ${itemName} 已加入订单清单`);
+    }
+
+    // 智能推荐逻辑 (波长/厚度/涂布)
+    function updateRecommendation() {
+        const wavelength = parseFloat(document.getElementById('wavelength').value);
+        const thickness = parseFloat(document.getElementById('thickness').value);
+        const coating = document.getElementById('coating').value;
+        let material = "", params = "";
+        if (wavelength < 3) {
+            material = "短波红外高透材料 P1 (SWIR-HighTrans)";
+            params = `退火温度 280°C · 涂布方式 ${coating} · 转速建议 2000rpm · 膜层厚度优化至 ${thickness}μm`;
+        } else if (wavelength >= 3 && wavelength <= 5) {
+            material = "中波红外窗口材料 M2 (MWIR-Sapphire级)";
+            params = `退火温度 340°C · ${coating === "旋涂" ? "旋涂转速 1600rpm" : coating === "喷涂" ? "喷涂速率 2ml/min" : "蒸镀速率 0.5Å/s"} · 增透设计匹配${thickness}μm`;
+        } else {
+            material = "长波红外截止滤光材料 L3 (LWIR-Cut)";
+            params = `退火温度 380°C · 多层膜堆叠 · ${coating} 工艺需真空辅助 · 响应波长${wavelength}μm 定制`;
+        }
+        if (thickness < 5) params += " · 超薄多层增透加强设计";
+        document.getElementById('recMaterial').innerHTML = material;
+        document.getElementById('recParams').innerHTML = `<strong>工艺参数：</strong> ${params}`;
+        // 保存全局当前推荐，供加入订单
+        window.currentRec = { name: material, specs: `波长${wavelength}μm/厚度${thickness}μm, 涂布${coating}, ${params}`, price: "小批量议价/每片¥500-1500" };
+    }
+
+    // 生成试用订单的完整流程（弹出MOU -> 模拟支付 -> 发货）
+    let tempOrderCallback = null;
+    function startOrderCreation() {
+        if (cart.length === 0) {
+            showToast("请先添加产品至订单清单！");
+            return false;
+        }
+        if (!orderGenerated) {
+            orderGenerated = true;
+            syncOrderStatusUI();
+            showToast("试用订单草稿已生成，请完成MOU签订");
+        }
+        // 弹出MOU模态框
+        const modal = document.getElementById('mouModal');
+        modal.style.display = 'flex';
+        return true;
+    }
+
+    // MOU签订后的逻辑 -> 支付选择模拟
+    function afterMou() {
+        mouSigned = true;
+        syncOrderStatusUI();
+        showToast("MOU 签订成功！请选择支付方式 (线上支付 / 信用支付)");
+        // 模拟支付选项弹窗简单使用confirm风格但为了体验，我们做个小对话框
+        let payChoice = confirm("请选择支付方式：\n点击“确定”使用线上支付（微信/银行转账）\n点击“取消”使用信用支付（授信额度）");
+        if (payChoice) {
+            paymentDone = true;
+            showToast("线上支付已完成（模拟），货款已冻结");
+        } else {
+            paymentDone = true;
+            showToast("信用支付已启用，账期30天，订单生效");
+        }
+        syncOrderStatusUI();
+        // 模拟物流发货自动触发
+        setTimeout(() => {
+            if (paymentDone) {
+                const trackingNo = 'SF' + Math.floor(Math.random()*10000000);
+                logisticsInfo = `已发货 顺丰速运 单号: ${trackingNo} 预计3日送达`;
+                syncOrderStatusUI();
+                showToast(`物流已更新: ${logisticsInfo}`);
+            }
+        }, 800);
+    }
+
+    // 初始化产品卡片
+    function buildProductCards() {
+        const grid = document.getElementById('productsGrid');
+        grid.innerHTML = '';
+        catalogProducts.forEach(prod => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <h3><i class="fas fa-cube"></i> ${prod.name}</h3>
+                <div class="product-spec">${prod.specs}</div>
+                <div class="price">${prod.price}</div>
+                <div><i class="fas fa-tachometer-alt"></i> 推荐工艺: ${prod.coating}</div>
+                <button class="btn-primary" style="margin-top:16px; width:100%;" data-id="${prod.id}"><i class="fas fa-cart-plus"></i> 加入订单</button>
+            `;
+            grid.appendChild(card);
+            card.querySelector('button').addEventListener('click', () => {
+                addToCart(prod.name, `${prod.specs} | 材料编号${prod.materialCode}`, prod.price);
+            });
+        });
+    }
+
+    // 页面加载及事件绑定
+    document.addEventListener('DOMContentLoaded', () => {
+        buildProductCards();
+        updateRecommendation();
+        // 监听选型改变自动刷新推荐
+        const inputs = ['wavelength', 'thickness', 'coating'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('input', () => updateRecommendation());
+            el.addEventListener('change', () => updateRecommendation());
+        });
+        document.getElementById('refreshRecBtn').addEventListener('click', () => updateRecommendation());
+        // 推荐结果添加到购物车
+        document.getElementById('addRecToCartBtn').addEventListener('click', () => {
+            if (window.currentRec) {
+                addToCart(window.currentRec.name, window.currentRec.specs, window.currentRec.price);
+            } else {
+                updateRecommendation();
+                addToCart(window.currentRec.name, window.currentRec.specs, window.currentRec.price);
+            }
+        });
+        // 生成试用订单按钮
+        document.getElementById('generateOrderBtn').addEventListener('click', startOrderCreation);
+        document.getElementById('clearCartBtn').addEventListener('click', () => {
+            cart = [];
+            updateCartUI();
+            resetOrderFlowState();
+            showToast("购物车已清空");
+        });
+        // MOU模态框控制
+        const modal = document.getElementById('mouModal');
+        document.getElementById('confirmMouBtn').addEventListener('click', () => {
+            modal.style.display = 'none';
+            afterMou();
+        });
+        document.getElementById('closeMouBtn').addEventListener('click', () => {
+            modal.style.display = 'none';
+            showToast("MOU签订取消，订单未完成");
+        });
+        // 技术支持提交模拟
+        document.getElementById('submitTechBtn').addEventListener('click', () => {
+            const name = document.getElementById('techName').value.trim() || "客户";
+            const ques = document.getElementById('techQuestion').value.trim();
+            if(ques) showToast(`✅ 感谢${name}，技术工单已接收，工程师会尽快联系调试支持！`);
+            else showToast("请填写技术问题，我们提供免费远程调试服务");
+        });
+        updateCartUI();
+        resetOrderFlowState();
+    });
+</script>
+</body>
+</html>
