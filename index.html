@@ -467,6 +467,18 @@
             </div>
         </div>
 
+        <!-- 收货地址信息 -->
+        <div class="address-section" style="background:#fff; border-radius:24px; padding:20px; margin:16px 0; border:1px solid #e2edf2;">
+            <h3><i class="fas fa-map-marker-alt"></i> 收货信息 <span style="color:red;">*</span></h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <input type="text" id="contactName" placeholder="联系人姓名" style="width:100%;">
+                <input type="text" id="contactPhone" placeholder="联系电话" style="width:100%;">
+                <input type="text" id="companyName" placeholder="公司名称" style="width:100%;">
+                <input type="text" id="addressDetail" placeholder="详细地址（省市区+街道）" style="width:100%; grid-column:span 2;">
+            </div>
+            <div class="address-warning" id="addressWarning" style="color:#d9534f; font-size:0.8rem; margin-top:8px;"></div>
+           </div>
+
         <!-- 订单状态演示区 (显示MOU/支付/物流信息) -->
         <div id="orderStatusPanel" style="background:#f1f5f9; border-radius: 24px; padding: 18px; margin-top: 15px;">
             <i class="fas fa-info-circle"></i> 订单状态 : <strong id="orderStateMsg">尚未生成订单</strong><br>
@@ -475,6 +487,9 @@
             <div id="logisticsStatus">📦 物流信息: 待发货</div>
         </div>
     </div>
+        <div id="shipmentAction" style="margin-top:16px; text-align:right; display:none;">
+        <button id="manualShipBtn" class="btn-primary"><i class="fas fa-shipping-fast"></i> 确认发货</button>
+        </div>
 
     <!-- 线上技术支持与调试服务 -->
     <div class="tech-support">
@@ -492,12 +507,12 @@
             <p>· 材料参数微调建议</p>
             <p>· 快速小样验证支持</p>
             <hr style="margin: 12px 0;">
-            <i class="fas fa-envelope"></i> 1493408752@qq.com <br>
-            <i class="fas fa-phone-alt"></i> 联系红外选型
+            <i class="fas fa-envelope"></i> support@GuangYing.com <br>
+            <i class="fas fa-phone-alt"></i> 400-882-红外选型
         </div>
     </div>
     <footer>
-        © 2026 光影线上材料选型与技术支持平台 | 红外材料智能B2B · 选型·MOU·信用支付一体化
+        © 2025 线上材料选型与技术支持平台 | 红外材料智能B2B · 选型·MOU·信用支付一体化
     </footer>
 </div>
 
@@ -515,10 +530,10 @@
 <script>
     // 预设产品数据库 (自助选品)
     const catalogProducts = [
-        { id: 1, name: "SWIR短波红外增透膜", specs: "响应波长: 1.2~2.5μm, 厚度8μm", price: "¥1200/片", coating: "旋涂", materialCode: "SW-AT1" },
-        { id: 2, name: "MWIR中波红外窗口材料", specs: "响应波长: 3~5μm, 厚度12μm", price: "¥1850/片", coating: "蒸镀", materialCode: "MW-M2" },
-        { id: 3, name: "LWIR长波红外滤光片", specs: "响应波长: 8~12μm, 厚度20μm", price: "¥2300/片", coating: "喷涂", materialCode: "LW-L3" }
-    ];
+    { id: 1, name: "SWIR短波红外溶液", specs: "响应波长: 1.2~2.5μm, 浓度可调", price: "¥3000/ml", coating: "旋涂", materialCode: "SW-AT1" },
+    { id: 2, name: "MWIR中波红外溶液", specs: "响应波长: 3~5μm, 粘度可调", price: "¥2500/ml", coating: "蒸镀", materialCode: "MW-M2" },
+    { id: 3, name: "LWIR长波红外溶液", specs: "响应波长: 8~12μm, 固含量可调", price: "¥2800/ml", coating: "喷涂", materialCode: "LW-L3" }
+ ];
 
     // 购物车数组
     let cart = [];   // { name, specs, price, type, extra }
@@ -577,6 +592,7 @@
         document.querySelectorAll('.step').forEach((step, idx) => { step.classList.remove('active'); });
         // 保留第一步高亮可选
         if(document.querySelector('.step')) document.querySelector('.step').classList.add('active');
+       document.getElementById('shipmentAction').style.display = 'none';
     }
 
     // 更新订单状态面板 (根据全局状态)
@@ -630,47 +646,112 @@
 
     // 生成试用订单的完整流程（弹出MOU -> 模拟支付 -> 发货）
     let tempOrderCallback = null;
-    function startOrderCreation() {
-        if (cart.length === 0) {
-            showToast("请先添加产品至订单清单！");
-            return false;
-        }
-        if (!orderGenerated) {
-            orderGenerated = true;
-            syncOrderStatusUI();
-            showToast("试用订单草稿已生成，请完成MOU签订");
-        }
-        // 弹出MOU模态框
-        const modal = document.getElementById('mouModal');
-        modal.style.display = 'flex';
-        return true;
+   function startOrderCreation() {
+    if (cart.length === 0) {
+        showToast("请先添加产品至订单清单！");
+        return false;
     }
+    // 获取地址信息
+    const contact = document.getElementById('contactName').value.trim();
+    const phone = document.getElementById('contactPhone').value.trim();
+    const company = document.getElementById('companyName').value.trim();
+    const address = document.getElementById('addressDetail').value.trim();
+    if (!contact || !phone || !company || !address) {
+        document.getElementById('addressWarning').innerText = "请完整填写收货信息（联系人、电话、公司、详细地址）";
+        showToast("请完整填写收货信息后再生成订单");
+        return false;
+    }
+    document.getElementById('addressWarning').innerText = "";
+    if (!orderGenerated) {
+        orderGenerated = true;
+        syncOrderStatusUI();
+        showToast("试用订单草稿已生成，请完成MOU签订");
+    }
+    // 弹出MOU模态框
+    const modal = document.getElementById('mouModal');
+    modal.style.display = 'flex';
+    return true;
+}
 
     // MOU签订后的逻辑 -> 支付选择模拟
     function afterMou() {
-        mouSigned = true;
-        syncOrderStatusUI();
-        showToast("MOU 签订成功！请选择支付方式 (线上支付 / 信用支付)");
-        // 模拟支付选项弹窗简单使用confirm风格但为了体验，我们做个小对话框
-        let payChoice = confirm("请选择支付方式：\n点击“确定”使用线上支付（微信/银行转账）\n点击“取消”使用信用支付（授信额度）");
-        if (payChoice) {
-            paymentDone = true;
-            showToast("线上支付已完成（模拟），货款已冻结");
-        } else {
-            paymentDone = true;
-            showToast("信用支付已启用，账期30天，订单生效");
-        }
-        syncOrderStatusUI();
-        // 模拟物流发货自动触发
-        setTimeout(() => {
-            if (paymentDone) {
-                const trackingNo = 'SF' + Math.floor(Math.random()*10000000);
-                logisticsInfo = `已发货 顺丰速运 单号: ${trackingNo} 预计3日送达`;
-                syncOrderStatusUI();
-                showToast(`物流已更新: ${logisticsInfo}`);
+    mouSigned = true;
+    syncOrderStatusUI();
+    showToast("MOU 签订成功！请选择支付方式。");
+
+    let payChoice = confirm("请选择支付方式：\n点击“确定”使用线上支付（需联系工作人员）\n点击“取消”使用信用支付（需授信审核）");
+    
+    // 创建或获取人工支付面板（如果不存在）
+    let manualPayPanel = document.getElementById('manualPayPanel');
+    if (!manualPayPanel) {
+        const orderPanel = document.getElementById('orderStatusPanel');
+        const panelHtml = `
+            <div id="manualPayPanel" style="margin-top:20px; padding:16px; background:#fff9e6; border-radius:20px; border-left:4px solid #ff9800;">
+                <h4><i class="fas fa-headset"></i> 人工支付通道</h4>
+                <p>请通过以下方式联系工作人员完成付款：</p>
+                <p><i class="fas fa-phone-alt"></i> 客服电话：<strong>190-764-92811</strong> (工作日 9:00-18:00)</p>
+                <p><i class="fab fa-weixin"></i> 企业微信：<strong>cq19076492811</strong> (扫码添加)</p>
+                <div id="paymentRequestArea">
+                    <label>转账回单号 / 备注：</label>
+                    <input type="text" id="paymentProofNo" placeholder="请输入银行转账回单号或订单备注" style="width:70%; margin:8px 0;">
+                    <button id="submitPaymentNoticeBtn" class="btn-outline"><i class="fas fa-paper-plane"></i> 通知已付款</button>
+                </div>
+                <div id="paymentNoticeStatus" style="font-size:0.85rem; color:#2c7da0; margin-top:8px;"></div>
+            </div>
+        `;
+        orderPanel.insertAdjacentHTML('beforeend', panelHtml);
+        manualPayPanel = document.getElementById('manualPayPanel');
+        
+        // 绑定“通知已付款”按钮事件
+        document.getElementById('submitPaymentNoticeBtn').addEventListener('click', function() {
+            const proof = document.getElementById('paymentProofNo').value.trim();
+            if (!proof) {
+                showToast("请填写转账回单号或备注信息");
+                return;
             }
-        }, 800);
+            document.getElementById('paymentNoticeStatus').innerHTML = "✅ 已收到您的付款通知，工作人员将在2小时内核实，请耐心等待。";
+            document.getElementById('submitPaymentNoticeBtn').disabled = true;
+            sessionStorage.setItem('paymentRequest', proof);
+            showToast("付款通知已提交，工作人员会尽快处理");
+        });
     }
+    
+    // 根据选择的支付方式显示不同提示（可选）
+    if (payChoice) {
+        showToast("您选择了线上支付，请联系工作人员完成线下汇款。");
+    } else {
+        showToast("您选择了信用支付，工作人员将主动联系您进行授信审核。");
+        const panel = document.getElementById('manualPayPanel');
+        if (panel) panel.insertAdjacentHTML('afterbegin', '<p style="color:#d9534f;">🔔 信用支付需人工审核资质，请等待工作人员联系。</p>');
+    }
+}
+
+    function showShipmentButton() {
+    const shipDiv = document.getElementById('shipmentAction');
+    if (paymentDone && !logisticsInfo) {
+        shipDiv.style.display = 'block';
+    } else {
+        shipDiv.style.display = 'none';
+    }
+}
+
+// 发货函数
+function triggerShipment() {
+    const contact = document.getElementById('contactName').value.trim();
+    const address = document.getElementById('addressDetail').value.trim();
+    if (!contact || !address) {
+        showToast("收货信息不完整，无法发货");
+        return;
+    }
+    const trackingNo = 'SF' + Math.floor(Math.random()*10000000);
+    logisticsInfo = `已发往：${address}（联系人：${contact}） 运单号: ${trackingNo}`;
+    syncOrderStatusUI();
+    showShipmentButton(); // 隐藏发货按钮
+    showToast(`✅ 物流已生成：${logisticsInfo}`);
+}
+
+// 绑定发货按钮事件（在 DOMContentLoaded 中添加）
+document.getElementById('manualShipBtn')?.addEventListener('click', triggerShipment);
 
     // 初始化产品卡片
     function buildProductCards() {
